@@ -16,6 +16,7 @@
  */
 package org.apache.dubbo.demo.provider;
 
+import org.apache.dubbo.config.spring.ServiceBean;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class Application {
@@ -26,6 +27,11 @@ public class Application {
     public static void main(String[] args) throws Exception {
         ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("spring/dubbo-provider.xml");
         context.start();
+
+
+        ServiceBean bean = context.getBean("org.apache.dubbo.demo.DemoService", ServiceBean.class);
+        bean.unexport();
+        bean.export();
         System.in.read();
     }
 }
