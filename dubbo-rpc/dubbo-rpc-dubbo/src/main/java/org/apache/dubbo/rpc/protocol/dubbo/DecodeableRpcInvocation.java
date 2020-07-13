@@ -29,7 +29,10 @@ import org.apache.dubbo.remoting.Codec;
 import org.apache.dubbo.remoting.Decodeable;
 import org.apache.dubbo.remoting.exchange.Request;
 import org.apache.dubbo.remoting.transport.CodecSupport;
+import org.apache.dubbo.rpc.RpcException;
 import org.apache.dubbo.rpc.RpcInvocation;
+import org.apache.dubbo.rpc.model.ApplicationModel;
+import org.apache.dubbo.rpc.model.ProviderModel;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -88,6 +91,14 @@ public class DecodeableRpcInvocation extends RpcInvocation implements Codec, Dec
         throw new UnsupportedOperationException();
     }
 
+    private void checkPathIsExist(String path) {
+        ProviderModel providerModel = ApplicationModel.getProviderModel(path);
+        if (providerModel == null) {
+            throw new IllegalArgumentException("Service not found:" + path);
+        }
+
+    }
+
     @Override
     public Object decode(Channel channel, InputStream input) throws IOException {
         ObjectInput in = CodecSupport.getSerialization(channel.getUrl(), serializationType)
@@ -97,7 +108,9 @@ public class DecodeableRpcInvocation extends RpcInvocation implements Codec, Dec
         request.setVersion(dubboVersion);
         setAttachment(DUBBO_VERSION_KEY, dubboVersion);
 
-        setAttachment(PATH_KEY, in.readUTF());
+        String path = in.readUTF();
+//        checkPathIsExist(path);
+        setAttachment(PATH_KEY, path);
         setAttachment(VERSION_KEY, in.readUTF());
 
         setMethodName(in.readUTF());

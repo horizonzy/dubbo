@@ -16,17 +16,16 @@
  */
 package org.apache.dubbo.demo.consumer;
 
-import org.apache.dubbo.common.utils.PojoUtils;
+import org.apache.dubbo.config.ReferenceConfig;
+import org.apache.dubbo.config.spring.ReferenceBean;
+import org.apache.dubbo.config.utils.ReferenceConfigCache;
 import org.apache.dubbo.demo.DemoService;
-
 import org.apache.dubbo.demo.Order;
 import org.apache.dubbo.demo.OrderService;
 import org.apache.dubbo.rpc.service.GenericService;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.io.IOException;
-import java.util.List;
-import java.util.Map;
 
 public class Application {
     /**
@@ -36,21 +35,17 @@ public class Application {
     public static void main(String[] args) throws ClassNotFoundException, IOException {
         ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("spring/dubbo-consumer.xml");
         context.start();
-//        GenericService demoService = context.getBean("orderService", GenericService.class);
-//        List<Object> results = (List<Object>) demoService.$invoke("getOrder", new String[]{"org.apache.dubbo.demo.Order"}, new Object[]{new Order()});
-//        OrderService orderService = context.getBean("orderService", OrderService.class);
-//        List<Order> order = orderService.getOrder(new Order());
-        DemoService demoService = context.getBean("demoService", DemoService.class);
-        System.out.println(demoService.sayHello("world"));
+        ReferenceBean demoReferenceBean = context.getBean("&demoService", ReferenceBean.class);
+        ReferenceBean orderReferenceBean = context.getBean("&orderService", ReferenceBean.class);
 
-//        while (true) {
-//            System.in.read();
-//            try {
-//                String world = demoService.sayHello("world");
-//                System.out.println(world);
-//            } catch (RuntimeException e) {
-//                e.printStackTrace();
-//            }
-//        }
+
+        DemoService demoService = context.getBean("demoService", DemoService.class);
+        OrderService orderService = context.getBean("orderService", OrderService.class);
+
+        demoReferenceBean.reRefer();
+        demoReferenceBean.reRefer();
+
+
+        System.in.read();
     }
 }

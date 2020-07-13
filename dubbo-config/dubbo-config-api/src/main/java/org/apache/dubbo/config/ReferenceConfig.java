@@ -41,12 +41,14 @@ import org.apache.dubbo.rpc.cluster.support.RegistryAwareCluster;
 import org.apache.dubbo.rpc.model.ApplicationModel;
 import org.apache.dubbo.rpc.model.ConsumerModel;
 import org.apache.dubbo.rpc.protocol.injvm.InjvmProtocol;
+import org.apache.dubbo.rpc.proxy.InvokerInvocationHandler;
 import org.apache.dubbo.rpc.service.GenericService;
 import org.apache.dubbo.rpc.support.ProtocolUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -239,7 +241,6 @@ public class ReferenceConfig<T> extends AbstractReferenceConfig {
 
     public synchronized T get() {
         checkAndUpdateSubConfigs();
-
         if (destroyed) {
             throw new IllegalStateException("The invoker of ReferenceConfig(" + url + ") has already destroyed!");
         }
@@ -247,6 +248,19 @@ public class ReferenceConfig<T> extends AbstractReferenceConfig {
             init();
         }
         return ref;
+    }
+
+    public void reRefer() {
+        invoker.destroy();
+        Class<?> cl = ref.getClass();
+        try {
+            Field field = cl.getDeclaredField("handler");
+            field.setAccessible(true);
+            invoker = REF_PROTOCOL.refer(interfaceClass, urls.get(0));
+            field.set(ref, new InvokerInvocationHandler(invoker));
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
     }
 
     public synchronized void destroy() {
@@ -370,7 +384,7 @@ public class ReferenceConfig<T> extends AbstractReferenceConfig {
                 }
             } else { // assemble URL from register center's configuration
                 // if protocols not injvm checkRegistry
-                if (!LOCAL_PROTOCOL.equalsIgnoreCase(getProtocol())){
+                if (!LOCAL_PROTOCOL.equalsIgnoreCase(getProtocol())) {
                     checkRegistry();
                     List<URL> us = loadRegistries(false);
                     if (CollectionUtils.isNotEmpty(us)) {
@@ -659,4 +673,6 @@ public class ReferenceConfig<T> extends AbstractReferenceConfig {
             }
         }
     }
+
+
 }

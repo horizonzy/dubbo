@@ -241,6 +241,12 @@ public class ReferenceBean<T> extends ReferenceConfig<T> implements FactoryBean,
 
     @Override
     public void destroy() {
+//        super.destroy();
         // do nothing
+    }
+
+    @Override
+    public void reRefer() {
+        super.reRefer();
     }
 }

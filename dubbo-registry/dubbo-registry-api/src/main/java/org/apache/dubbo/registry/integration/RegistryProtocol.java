@@ -682,19 +682,38 @@ public class RegistryProtocol implements Protocol {
                 logger.warn(t.getMessage(), t);
             }
 
-            executor.submit(() -> {
-                try {
-                    int timeout = ConfigurationUtils.getServerShutdownTimeout();
-                    if (timeout > 0) {
-                        logger.info("Waiting " + timeout + "ms for registry to notify all consumers before unexport. " +
-                                "Usually, this is called when you use dubbo API");
-                        Thread.sleep(timeout);
+//            executor.submit(() -> {
+//                try {
+//                    int timeout = ConfigurationUtils.getServerShutdownTimeout();
+//                    if (timeout > 0) {
+//                        logger.info("Waiting " + timeout + "ms for registry to notify all consumers before unexport. " +
+//                                "Usually, this is called when you use dubbo API");
+//                        Thread.sleep(timeout);
+//                    }
+//                    exporter.unexport();
+//                } catch (Throwable t) {
+//                    logger.warn(t.getMessage(), t);
+//                }
+//            });
+
+            String xxxx = System.getProperty("xxxx");
+            if (Boolean.TRUE.toString().equals(xxxx)) {
+                exporter.unexport();
+            } else {
+                executor.submit(() -> {
+                    try {
+                        int timeout = ConfigurationUtils.getServerShutdownTimeout();
+                        if (timeout > 0) {
+                            logger.info("Waiting " + timeout + "ms for registry to notify all consumers before unexport. " +
+                                    "Usually, this is called when you use dubbo API");
+                            Thread.sleep(timeout);
+                        }
+                        exporter.unexport();
+                    } catch (Throwable t) {
+                        logger.warn(t.getMessage(), t);
                     }
-                    exporter.unexport();
-                } catch (Throwable t) {
-                    logger.warn(t.getMessage(), t);
-                }
-            });
+                });
+            }
         }
 
         public void setSubscribeUrl(URL subscribeUrl) {

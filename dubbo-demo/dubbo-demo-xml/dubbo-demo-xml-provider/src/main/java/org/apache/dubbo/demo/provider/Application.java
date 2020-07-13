@@ -30,8 +30,17 @@ public class Application {
 
 
         ServiceBean bean = context.getBean("org.apache.dubbo.demo.DemoService", ServiceBean.class);
+        ServiceBean bean1 = context.getBean("org.apache.dubbo.demo.OrderService", ServiceBean.class);
+        System.setProperty("xxxx", "true");
         bean.unexport();
+        System.setProperty("xxxx", "false");
+
+        System.setProperty("xxxx", "true");
+        bean1.unexport();
+        System.setProperty("xxxx", "false");
+
         bean.export();
+        bean1.export();
         System.in.read();
     }
 }

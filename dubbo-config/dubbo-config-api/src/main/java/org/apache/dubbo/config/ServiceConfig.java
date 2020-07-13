@@ -393,14 +393,11 @@ public class ServiceConfig<T> extends AbstractServiceConfig {
     }
 
     protected synchronized void doExport() {
-        if (unexported) {
-            throw new IllegalStateException("The service " + interfaceClass.getName() + " has already unexported!");
-        }
         if (exported) {
             return;
         }
         exported = true;
-
+        unexported = false;
         if (StringUtils.isEmpty(path)) {
             path = interfaceName;
         }
@@ -420,9 +417,6 @@ public class ServiceConfig<T> extends AbstractServiceConfig {
     }
 
     public synchronized void unexport() {
-        if (!exported) {
-            return;
-        }
         if (unexported) {
             return;
         }
@@ -436,7 +430,9 @@ public class ServiceConfig<T> extends AbstractServiceConfig {
             }
             exporters.clear();
         }
+        generic = null;
         unexported = true;
+        exported = false;
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
@@ -565,7 +561,7 @@ public class ServiceConfig<T> extends AbstractServiceConfig {
 
             // export to local if the config is not remote (export to remote only when config is remote)
             if (!Constants.SCOPE_REMOTE.equalsIgnoreCase(scope)) {
-                exportLocal(url);
+//                exportLocal(url);
             }
             // export to remote if the config is not local (export to local only when config is local)
             if (!Constants.SCOPE_LOCAL.equalsIgnoreCase(scope)) {
