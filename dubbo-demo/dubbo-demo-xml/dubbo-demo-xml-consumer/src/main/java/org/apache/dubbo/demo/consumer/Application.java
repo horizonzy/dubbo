@@ -35,15 +35,26 @@ public class Application {
     public static void main(String[] args) throws ClassNotFoundException, IOException {
         ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("spring/dubbo-consumer.xml");
         context.start();
-        ReferenceBean demoReferenceBean = context.getBean("&demoService", ReferenceBean.class);
-        ReferenceBean orderReferenceBean = context.getBean("&orderService", ReferenceBean.class);
+//        ReferenceBean demoReferenceBean = context.getBean("&demoService", ReferenceBean.class);
+//        ReferenceBean orderReferenceBean = context.getBean("&orderService", ReferenceBean.class);
 
+//        DemoService demoService = context.getBean("demoService", DemoService.class);
+//        GenericService genericService = context.getBean("demoService", GenericService.class);
+//        Object result = genericService.$invoke("sayHello", new String[]{"java.lang.String"}, new Object[]{"world"});
+//        System.out.println(result);
 
         DemoService demoService = context.getBean("demoService", DemoService.class);
-        OrderService orderService = context.getBean("orderService", OrderService.class);
+        System.out.println(demoService.sayHello("world"));
+//        System.out.println(demoService.sayHello("world"));
 
-        demoReferenceBean.reRefer();
-        demoReferenceBean.reRefer();
+//        DemoService demoService = context.getBean("demoService", DemoService.class);
+//        System.out.println(demoService.sayHello("world"));
+//        GenericService genericService = context.getBean("demoService", GenericService.class);
+//        Object sayHello = genericService.$invoke("sayHello", new String[]{"java.lang.String"}, new Object[]{"world"});
+//        System.out.println(sayHello);
+
+//        demoReferenceBean.reRefer();
+//        demoReferenceBean.reRefer();
 
 
         System.in.read();

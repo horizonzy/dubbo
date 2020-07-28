@@ -25,18 +25,18 @@
     <dubbo:application name="demo-provider"/>
 
 <!--    <dubbo:registry address="multicast://224.5.6.7:1234" />-->
-    <dubbo:registry address="zookeeper://127.0.0.1:2181" check="false"/>
+    <dubbo:registry address="nacos://127.0.0.1:8848" />
 
     <dubbo:protocol name="dubbo" port="20881"/>
 
 
-    <dubbo:service interface="org.apache.dubbo.demo.DemoService" ref="demoService" timeout="3000" group="green" version="1.0.1" />
+    <dubbo:service interface="org.apache.dubbo.demo.DemoService" ref="demoService"  />
 
-    <dubbo:service interface="org.apache.dubbo.demo.OrderService" ref="orderService"/>
+<!--    <dubbo:service interface="org.apache.dubbo.demo.OrderService" ref="orderService"/>-->
 
     <bean id="demoService" class="org.apache.dubbo.demo.provider.DemoServiceImpl"/>
-
-    <bean id="orderService" class="org.apache.dubbo.demo.provider.OrderServiceImpl"/>
+<!---->
+<!--    <bean id="orderService" class="org.apache.dubbo.demo.provider.OrderServiceImpl"/>-->
 
 
 </beans>

@@ -47,7 +47,6 @@ public class InvokerInvocationHandler implements InvocationHandler {
         if (method.getDeclaringClass() == Object.class) {
             return method.invoke(invoker, args);
         }
-        org.apache.dubbo.rpc.RpcContext.getContext().setAttachment("xxx","yyy");
         if ("toString".equals(methodName) && parameterTypes.length == 0) {
             return invoker.toString();
         }
