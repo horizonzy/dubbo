@@ -23,7 +23,7 @@
 
     <dubbo:application name="demo-consumer"/>
 
-    <dubbo:registry address="nacos://127.0.0.1:8848"/>
+    <dubbo:registry address="zookeeper://127.0.0.1:2181"/>
 <!--    <dubbo:registry address="zookeeper://127.0.0.1:2181"/>-->
 <!--    <dubbo:registry address="zookeeper://127.0.0.1:2181"/>-->
 
@@ -33,7 +33,7 @@
 
     <!-- generate proxy for the remote service, then demoService can be used in the same way as the
     local regular interface -->
-    <dubbo:reference id="demoService" check="false" interface="org.apache.dubbo.demo.DemoService" />
+    <dubbo:reference id="demoService" check="false" interface="org.apache.dubbo.demo.DemoService" timeout="1000000"/>
 <!--    <dubbo:reference id="orderService" check="false" interface="org.apache.dubbo.demo.OrderService" timeout="1000000" retries="0"/>-->
 
 <!--    <dubbo:metadata-report address="zookeeper://127.0.0.1:2181"/>-->
