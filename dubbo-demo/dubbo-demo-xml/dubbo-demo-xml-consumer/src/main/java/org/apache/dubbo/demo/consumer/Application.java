@@ -44,7 +44,14 @@ public class Application {
 //        System.out.println(result);
 
         DemoService demoService = context.getBean("demoService", DemoService.class);
-        System.out.println(demoService.sayHello("world"));
+        while (true) {
+            System.in.read();
+            try {
+                System.out.println(demoService.sayHello("world"));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
 //        System.out.println(demoService.sayHello("world"));
 
 //        DemoService demoService = context.getBean("demoService", DemoService.class);
@@ -57,6 +64,5 @@ public class Application {
 //        demoReferenceBean.reRefer();
 
 
-        System.in.read();
     }
 }

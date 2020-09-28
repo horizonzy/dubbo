@@ -668,16 +668,21 @@ public class RegistryProtocol implements Protocol {
 
             Registry registry = RegistryProtocol.INSTANCE.getRegistry(originInvoker);
             try {
-                registry.unregister(registerUrl);
+                if (registerUrl != null) {
+                    registry.unregister(registerUrl);
+                }
             } catch (Throwable t) {
                 logger.warn(t.getMessage(), t);
             }
             try {
-                NotifyListener listener = RegistryProtocol.INSTANCE.overrideListeners.remove(subscribeUrl);
-                registry.unsubscribe(subscribeUrl, listener);
-                DynamicConfiguration.getDynamicConfiguration()
-                        .removeListener(subscribeUrl.getServiceKey() + CONFIGURATORS_SUFFIX,
-                                serviceConfigurationListeners.get(subscribeUrl.getServiceKey()));
+                if (subscribeUrl != null) {
+                    NotifyListener listener = RegistryProtocol.INSTANCE.overrideListeners.remove(subscribeUrl);
+                    registry.unsubscribe(subscribeUrl, listener);
+                    DynamicConfiguration.getDynamicConfiguration()
+                            .removeListener(subscribeUrl.getServiceKey() + CONFIGURATORS_SUFFIX,
+                                    serviceConfigurationListeners.get(subscribeUrl.getServiceKey()));
+                }
+
             } catch (Throwable t) {
                 logger.warn(t.getMessage(), t);
             }
