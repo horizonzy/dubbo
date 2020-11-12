@@ -292,7 +292,7 @@ public class ReferenceConfig<T> extends AbstractReferenceConfig {
         map.put(SIDE_KEY, CONSUMER_SIDE);
 
         appendRuntimeParameters(map);
-        if (!isGeneric()) {
+        if (!ProtocolUtils.isGeneric(getGeneric())) {
             String revision = Version.getVersion(interfaceClass, version);
             if (revision != null && revision.length() > 0) {
                 map.put(REVISION_KEY, revision);
@@ -542,8 +542,8 @@ public class ReferenceConfig<T> extends AbstractReferenceConfig {
         if (interfaceClass != null) {
             return interfaceClass;
         }
-        if (isGeneric()
-                || (getConsumer() != null && getConsumer().isGeneric())) {
+        if (ProtocolUtils.isGeneric(getGeneric())
+                || (getConsumer() != null && ProtocolUtils.isGeneric(getConsumer().getGeneric()))) {
             return GenericService.class;
         }
         try {

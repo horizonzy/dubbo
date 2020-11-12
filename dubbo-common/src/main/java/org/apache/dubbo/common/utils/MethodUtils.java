@@ -38,4 +38,17 @@ public class MethodUtils {
                 && method.getParameterTypes().length == 0
                 && ClassUtils.isPrimitive(method.getReturnType());
     }
+
+    /**
+     * Check if the method is a deprecated method. The standard is whether the {@link java.lang.Deprecated} annotation is declared on the class.
+     * Return {@code true} if this annotation is present.
+     * Otherwise, return {@code false}.
+     *
+     * @param method the method to check
+     * @return whether the given method is deprecated method
+     */
+    public static boolean isDeprecated(Method method) {
+        return method.getAnnotation(Deprecated.class) != null;
+    }
+
 }

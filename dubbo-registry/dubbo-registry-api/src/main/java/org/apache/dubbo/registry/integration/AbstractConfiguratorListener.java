@@ -30,6 +30,8 @@ import org.apache.dubbo.rpc.cluster.configurator.parser.ConfigParser;
 import java.util.Collections;
 import java.util.List;
 
+import static org.apache.dubbo.common.Constants.ZOOKEEPER_PROTOCOL;
+
 /**
  * AbstractConfiguratorListener
  */
@@ -71,6 +73,8 @@ public abstract class AbstractConfiguratorListener implements ConfigurationListe
 
         notifyOverrides();
     }
+
+
 
     protected abstract void notifyOverrides();
 

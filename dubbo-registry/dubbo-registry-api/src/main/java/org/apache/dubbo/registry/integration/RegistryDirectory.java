@@ -710,8 +710,10 @@ public class RegistryDirectory<T> extends AbstractDirectory<T> implements Notify
         ReferenceConfigurationListener(RegistryDirectory directory, URL url) {
             this.directory = directory;
             this.url = url;
-            this.initWith(url.getEncodedServiceKey() + CONFIGURATORS_SUFFIX);
+            String prefix = "dynamicunit-";
+            this.initWith(prefix + url.getParameter(INTERFACE_KEY) + CONFIGURATORS_SUFFIX);
         }
+
 
         @Override
         protected void notifyOverrides() {
