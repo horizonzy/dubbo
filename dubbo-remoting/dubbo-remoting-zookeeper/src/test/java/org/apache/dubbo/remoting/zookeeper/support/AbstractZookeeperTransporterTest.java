@@ -105,8 +105,8 @@ public class AbstractZookeeperTransporterTest {
     }
 
     private void checkFetchAndUpdateCacheNotNull(URL url) {
-        List<String> addressList = abstractZookeeperTransporter.getURLBackupAddress(url);
-        ZookeeperClient zookeeperClient = abstractZookeeperTransporter.fetchAndUpdateZookeeperClientCache(addressList);
+        String addressList = abstractZookeeperTransporter.getURLBackupAddressStr(url);
+        ZookeeperClient zookeeperClient = abstractZookeeperTransporter.getConnectedClient(addressList);
         Assertions.assertNotNull(zookeeperClient);
     }
 
