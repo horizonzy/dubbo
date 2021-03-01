@@ -83,7 +83,7 @@ public class AbstractZookeeperTransporterTest {
     }
 
     @Test
-    public void testFetchAndUpdateZookeeperClientCache() throws Exception {
+    public void testGetCachedZookeeperClient() throws Exception {
         int zkServerPort2 = NetUtils.getAvailablePort();
         TestingServer zkServer2 = new TestingServer(zkServerPort2, true);
 
@@ -103,18 +103,18 @@ public class AbstractZookeeperTransporterTest {
         Assertions.assertEquals(abstractZookeeperTransporter.getZookeeperClientMap().get(cacheAddressStr), newZookeeperClient);
 
         URL url2 = URL.valueOf("zookeeper://127.0.0.1:" + zkServerPort3 + "/org.apache.dubbo.metadata.store.MetadataReport?backup=127.0.0.1:" + zkServerPort + ",127.0.0.1:" + zkServerPort2 + "&address=zookeeper://127.0.0.1:2181&application=metadatareport-local-xml-provider2&cycle-report=false&interface=org.apache.dubbo.metadata.store.MetadataReport&retry-period=4590&retry-times=23&sync-report=true");
-        checkFetchAndUpdateCacheNotNull(url2);
+        checkGetCacheConnectedClientNotNull(url2);
 
         URL url3 = URL.valueOf("zookeeper://127.0.0.1:" + zkServerPort2 + "/org.apache.dubbo.metadata.store.MetadataReport?backup=127.0.0.1:" + zkServerPort + ",127.0.0.1:" + zkServerPort3 + "&address=zookeeper://127.0.0.1:2181&application=metadatareport-local-xml-provider2&cycle-report=false&interface=org.apache.dubbo.metadata.store.MetadataReport&retry-period=4590&retry-times=23&sync-report=true");
-        checkFetchAndUpdateCacheNotNull(url3);
+        checkGetCacheConnectedClientNotNull(url3);
 
         zkServer2.stop();
         zkServer3.stop();
     }
 
-    private void checkFetchAndUpdateCacheNotNull(URL url) {
+    private void checkGetCacheConnectedClientNotNull(URL url) {
         String addressList = abstractZookeeperTransporter.getURLBackupAddressStr(url);
-        ZookeeperClient zookeeperClient = abstractZookeeperTransporter.getConnectedClient(addressList);
+        ZookeeperClient zookeeperClient = abstractZookeeperTransporter.getCachedConnectedClient(addressList);
         Assertions.assertNotNull(zookeeperClient);
     }
 
